@@ -1,17 +1,26 @@
 # coding: utf-8
 
-import sys
 import signal
+import datetime
 import traceback
+
+last_sigint_time = None
 
 
 def sigint_handler(sig, stack):
-    traceback.print_stack(stack)
-    sys.stdout.write(("Stop the script (%s/[%s])? ") % ('y', 'n'))
-    sys.stdout.flush()
-    line = sys.stdin.readline()
-    if line.lower().startswith('y') and 'n' not in line.lower():
+    global last_sigint_time
+    now = datetime.datetime.now()
+    if not last_sigint_time:
+        stop = False
+    elif now - last_sigint_time < datetime.timedelta(seconds=1):
+        stop = True
+    else:
+        stop = False
+    last_sigint_time = now
+    if stop:
         signal.default_int_handler(sig, stack)
+    else:
+        traceback.print_stack(stack)
 
 _signal = signal.signal
 

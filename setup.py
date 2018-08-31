@@ -4,7 +4,7 @@ setup(
     name='sigint_printstack',
     version='0.0.1',
     keywords=('sigint print_stack'),
-    description='print stack when sigint',
+    description='a small debug tool, invoke trackback.print_stack when received sigint.',
     license='MIT License',
     install_requires=[],
 
